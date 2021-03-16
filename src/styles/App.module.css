@@ -1,0 +1,36 @@
+.app {
+  height: 100%;
+}
+
+.appHeader {
+  background-color: #282c34;
+  height: 4em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: white;
+  padding: 1em 2em;
+}
+
+.appLink {
+  color: #61dafb;
+}
+
+.appMain {
+  height: calc(100% - 8em);
+  padding: 1em 2em;
+  display: flex;
+  flex-direction: row;
+}
+
+.walletArea {
+  width: 30em;
+  height: 3em;
+  background-color: goldenrod;
+}
+
+.chainArea {
+  width: calc(100% - 6em);
+  height: 4em;
+  background-color: gray;
+}
