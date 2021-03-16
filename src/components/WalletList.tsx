@@ -10,13 +10,19 @@ const createWallets = (): Wallet[] => {
    return wallets;
 }
 
-export const WalletList = () => {
+const WalletList = () => {
    const [wallets, setWallets] = useState<Wallet[]>(createWallets());
 
 
    return (
       <div>
-         
+         {wallets.map((wallet, index) => (
+            <div key={index}>
+               {wallet.publicKey}
+            </div>
+         ))}
       </div>
    )
 }
+
+export default WalletList;

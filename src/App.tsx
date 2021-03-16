@@ -1,4 +1,5 @@
 import React from 'react';
+import WalletList from './components/WalletList';
 import logo from './logo.svg';
 import styles from './styles/App.module.css';
 
@@ -11,7 +12,7 @@ function App() {
       <main className={styles.appMain}>
 
         <div className={styles.walletArea}>
-          
+          <WalletList />
         </div>
         <div className={styles.chainArea}>
 
