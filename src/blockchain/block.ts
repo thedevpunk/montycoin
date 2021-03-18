@@ -1,4 +1,4 @@
-import * as crypto from 'crypto';
+import CryptoJS from 'crypto-js';
 import Transaction from './transaction';
 
 class Block {
@@ -15,10 +15,9 @@ class Block {
    calcHash() {
       const str = JSON.stringify(this.prevHash + this.transactions.map(e => e.toString()).join() + this.timestamp.toString() + this.nonce);
 
-      const hash = crypto.createHash('SHA256');
-      hash.update(str).end();
+      const hash = CryptoJS.SHA256(str);
 
-      return hash.digest('hex');
+      return CryptoJS.enc.Hex.stringify(hash);
    }
 
    mine(difficulty: number) {
@@ -27,10 +26,9 @@ class Block {
       console.log('⛏ mining...');
 
       while (true) {
-         const hash = crypto.createHash('SHA256');
-         hash.update((this.nonce + solution).toString()).end();
+         const hash = CryptoJS.SHA256((this.nonce + solution).toString());
 
-         const attempt = hash.digest('hex');
+         const attempt = CryptoJS.enc.Hex.stringify(hash);
 
          if (attempt.substr(0, difficulty) === Array(difficulty + 1).join('0')) {
             console.log(`✅ solved: ${solution}`);

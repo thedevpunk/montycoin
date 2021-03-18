@@ -1,4 +1,5 @@
-import * as crypto from 'crypto';
+import { JSEncrypt } from 'jsencrypt';
+import CryptoJS from 'crypto-js';
 
 class Transaction {
    constructor(
@@ -16,10 +17,14 @@ class Transaction {
    calcHash() {
       const str = JSON.stringify(this.amount + this.payer + this.payee);
 
-      const hash = crypto.createHash('SHA256');
-      hash.update(str).end();
+      const hash = CryptoJS.SHA256(str);
 
-      return hash.digest('hex');
+      return CryptoJS.enc.Hex.stringify(hash);
+
+      // const hash = crypto.createHash('SHA256');
+      // hash.update(str).end();
+
+      // return hash.digest('hex');
    }
 
    sign(address: string, key: string) {
@@ -29,10 +34,18 @@ class Transaction {
 
       const hash = this.calcHash();
 
-      const sign = crypto.createSign('SHA256');
-      sign.update(hash).end();
+      var sign = new JSEncrypt({});
+      sign.setPrivateKey(key);
+      // var signature = sign.sign($('#input').val(), CryptoJS.SHA256, "sha256");
+      const signature = sign.sign(hash, (input: string): string => CryptoJS.SHA256(input).toString(), "sha256");
 
-      this.signature = sign.sign(key).toString('hex');
+      if (!signature) {
+         throw new Error('Error setting the signature!');
+      }
+
+      this.signature = signature;
+
+      console.log('transaction signature:', this.signature);
    }
 
    verify() {
@@ -44,10 +57,12 @@ class Transaction {
 
       const hash = this.calcHash();
 
-      const verifier = crypto.createVerify('SHA256');
-      verifier.update(hash);
+      var verify = new JSEncrypt({});
+      verify.setPublicKey(this.payer);
 
-      const isValid = verifier.verify(this.payer, this.signature, 'hex');
+      var isValid = verify.verify(hash, this.signature, (input: string): string => CryptoJS.SHA256(input).toString());
+
+      console.log('signature valid', isValid);
 
       return isValid;
    }
